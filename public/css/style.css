@@ -26,7 +26,7 @@
     --tertiart: #EB7A23;
     --red: #dd1c1a;
     /* --red: #fa003f; */
-    /* --black: 0, 5, 1; */
+    --blackRGB: 0, 5, 1;
     --black: #000501;
     --whiteRGB: rgb(240, 240, 240);
     --white: #f0f0f0;
@@ -48,6 +48,7 @@ a {
     text-align: center;
 }
 input.login-input {
+    outline: none;
     text-align: center;
 }
 .login-hr {
@@ -63,6 +64,10 @@ input.login-input {
     padding-bottom: 1rem;
 }
 #login-div {
+    /* background-image:
+        radial-gradient(60% 130% at bottom right,transparent 92%, var(--white) 92.2%),
+        linear-gradient(0deg, var(--primary) 100%, var(--white) 100%); */
+    border: 1px solid rgba(var(--blackRGB), .5);
     padding: 2rem 2rem 5rem 2rem;
     background-color: var(--white);
     height: auto;
@@ -74,8 +79,18 @@ input.login-input {
     background-image:
         radial-gradient(60% 130% at bottom right,transparent 92%, var(--white) 92.2%),
         linear-gradient(0deg, var(--primary) 100%, var(--white) 100%);
+    /* background: 
+        linear-gradient(70deg, var(--white) 30%, rgba(0,0,0,0) 30%), 
+        linear-gradient(70deg, var(--primary) 75%, var(--white) 60%); */
     width: 100%;
     height: 100vh;
+}
+@media(max-width: 450px) {
+    #login-body {
+        background-image: 
+        radial-gradient(110% 75% at bottom left,transparent 100%, var(--white) 100.2%), 
+        linear-gradient(14deg, var(--primary) 92%, var(--white) 66%);
+    }
 }
 
 /* credits */
