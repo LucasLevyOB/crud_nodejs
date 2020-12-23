@@ -39,7 +39,8 @@ function sortTable(elem) {
 try {
     toggleButton.addEventListener('click', () => {
         sideBar.classList.toggle('show-sidebar');
-        toggleButton.classList.toggle('color-w');
+        toggleButton.children[0].classList.toggle('d-none');
+        toggleButton.children[1].classList.toggle('d-none');
     });
 } catch (error) {
     // console.log(error);

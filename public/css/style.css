@@ -161,32 +161,41 @@ table {
     opacity: .9;
 }
 #toggle-sidebar {
-    color: #000000;
+    color: var(--black);
     display: none;
     z-index: 20;
     cursor: pointer;
-    padding: 2px;
+    padding: 3px;
     transition-duration: 1s;
+    height: 38px;
+    width: 38px;
 }
 
+/* sidebar */
 /* menu */
-.menu-ul > li > a > img {
-    margin-right: 2px;
+.sidebar-icon {
+    margin-right: 1rem;
+    padding: 1px 2px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
     height: auto;
-    max-width: 32px;
+    width: 28px;
 }
 .menu-ul > li > a {
-    color: var(--white);
+    font-weight: 500;
+    font-size: 19px;
+    color: var(--black);
     text-decoration: none;
     width: 100%;
 }
 .menu-ul > li:hover {
-    opacity: .85;
+    background-color: rgba(var(--blackRGB), .1);
 }
 .menu-ul > li {
     /* margin-bottom: .5rem; */
     /* box-shadow: 0px 5px 10px -10px rgba(200, 200, 200, .5); */
-    border-bottom: 1px solid rgba(0, 0, 0, .5);
+    /* border-bottom: 1px solid rgba(0, 0, 0, .5); */
     flex-wrap: wrap;
     display: flex;
     text-align: left;
@@ -200,31 +209,32 @@ table {
 }
 
 /* logo */
+.logo-img {
+    width: 100%;
+    max-width: 180px;
+    height: auto;
+    width: 100%;
+}
+#logo-div {
+    padding: 5px 1rem;
+    min-height: 100px;
+    color: var(--secondary);
+}
 #logo-div {
     min-height: 100px;
-     color: var(--tertiart);
+    color: var(--secondary);
 }
 
-/* sidebar */
 #sidebar {
     /* border-right: 1px solid rgba(0, 0, 0, .5); */
     transition-duration: .5s;
     left: 0;
-    word-wrap: break-word;
-    padding: 5px 2px;
-    background-image: 
-        radial-gradient(109% 17% at bottom left,transparent 92%, var(--primary) 92.2%), 
-        linear-gradient(0deg, #ffffff00 100%, var(--primary) 100%);
+    background-color: var(--primary);
     color: #000000;
     min-height: 100vh;
     height: auto;
-    width: 250px;
-}
-#sidebar a{
-    color: #000000;
-}
-#sidebar a:hover{
-    color: white
+    max-width: 250px;
+    width: 100%;
 }
 
 /* body */
@@ -240,14 +250,12 @@ body {
 /* @medias */
 @media(max-width: 690px) {
     #toggle-sidebar {
-        display: block;
+        display: flex;
     }
     #main-body {
         width: 100%;
     }
     #sidebar {
-        max-width: 250px;
-        width: 100%;
         z-index: 10;
         left: -300px;
         position: absolute;
@@ -261,6 +269,9 @@ body {
 }
 
 /* generic classes */
+.active-sidebar {
+    background-color: rgba(var(--blackRGB), .1);
+}
 .color-w {
     color: var(--white) !important;
 }

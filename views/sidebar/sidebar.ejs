@@ -1,26 +1,29 @@
 <header id="sidebar">
     <div id="logo-div" class="w-100 d-flex justify-content-center align-items-center">
-        <div id="logo">Logo</div>
+        <img src="/img/logo_sistema_estoque.png" alt="" class="logo-img">
     </div>
+    <hr>
     <ul class="menu-ul">
-            <li>
-                <a href="/index">
-                    <!-- <img src="/img/speedometer.svg"> -->
-                    <i class="fas fa-tachometer-alt"></i>
+            <li class="<%- paginaAtual === '/index' ? 'active-sidebar' : '' %> ">
+                <a href="/index" class="row">
+                    <div class="sidebar-icon fa-1x">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
                     Início
                 </a>
             </li>
-            <li>
-                <a href="/AddProd">
-                    <!-- <img src="/img/create.svg"> -->
-                    <i class="fas fa-plus"></i>
+            <li class="<%- paginaAtual === '/AddProd' ? 'active-sidebar' : '' %> ">
+                <a href="/AddProd" class="row">
+                    <div class="sidebar-icon">
+                        <i class="fas fa-plus fa-1x"></i>
+                    </div>
                     Cadastrar
                 </a>
             </li>
         </ul>
 </header>
-<div id="toggle-sidebar">
+<div id="toggle-sidebar" class="justify-content-center align-items-center">
     <!-- <img src="/img/lista.png" alt=""> -->
     <i class="fas fa-bars fa-2x"></i>
-    <!-- <i class="fas fa-times fa-2x"></i> -->
+    <i class="fas fa-times fa-2x d-none"></i>
 </div>
