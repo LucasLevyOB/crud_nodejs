@@ -32,11 +32,11 @@ app.get("/index/:id?", function(req,res) {
 	if (!req.params.id) {
 		sql.query("select * from ss_products", function(err,results,fields) {
 			// res.render('index', {data: results});
-			res.render('index', {data: results});
+			res.render('index', {data: results, paginaAtual: '/index'});
 		});
 	}else{
 		sql.query("select * from ss_products where pro_id='"+req.params.id+"'", function(err,results,fields) {
-			res.render('index', {data: results});
+			res.render('index', {data: results, paginaAtual: '/index'});
 			// res.render('index', {data: results});
 		});
 	}
@@ -55,7 +55,7 @@ app.get("/update/:id", function(req,res){
 
 app.get("/AddProd", function(req,res) {
 	paginaAtual = "/AddProd";
-	res.render('AddProd');
+	res.render('AddProd', {paginaAtual: '/AddProd'});
 	
 });
 
