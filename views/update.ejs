@@ -2,7 +2,7 @@
 <%- include('./sidebar/sidebar.ejs') -%>
 <main id="main-body">
     <h1 class="w-100 text-center">Edição de produtos</h1>
-    <form method= "POST" action="/ConfirmEdit" name="EditProd">
+    <form method= "POST" action="/update" name="EditProd">
         <div class="form-group">
             <input type="hidden" name="pro_id" id="pro_id" value="<%=pro_id%>">
             <label for="product-name">Nome do produto</label>

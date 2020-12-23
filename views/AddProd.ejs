@@ -2,7 +2,7 @@
 <%- include('./sidebar/sidebar.ejs') -%>
 <main id="main-body">
     <h1 class="w-100 text-center  mb-4 mt-2">Cadastro de produtos</h1>
-    <form method= "POST" action="ConfirmAdd" name="AddProd">
+    <form method= "POST" action="AddProd" name="AddProd">
         <div class="form-group">
             <input type="hidden" name="pro_id" id="pro_id" value="<%= typeof(pro_id) === 'undefined' ? '' : pro_id %>">
             <label for="product-name">Nome do produto</label>

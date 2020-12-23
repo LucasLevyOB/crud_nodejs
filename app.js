@@ -6,6 +6,7 @@ const sql = require('./db/server');
 const pdf = require('html-pdf');
 const fs = require('fs');
 
+var paginaAtual;
 // instancias
 const app = express();
 const urlencodeParser = bodyParser.urlencoded({extended:false});
@@ -22,7 +23,7 @@ app.use('/img', express.static(__dirname+'/public/img'));
 app.use('/fontawesome', express.static(__dirname+'/node_modules/@fortawesome/fontawesome-free'));
 
 //Rotas
-app.get("/", function(req,res) {
+app.get("/SystemStock", function(req,res) {
 	// res.sendFile(__dirname + '/views/login.handlebars');
 	res.render('login');
 });
@@ -34,7 +35,7 @@ app.get("/index/:id?", function(req,res) {
 			res.render('index', {data: results});
 		});
 	}else{
-		sql.query("select * from ss_products where id='"+req.params.id+"'", function(err,results,fields) {
+		sql.query("select * from ss_products where pro_id='"+req.params.id+"'", function(err,results,fields) {
 			res.render('index', {data: results});
 			// res.render('index', {data: results});
 		});
@@ -52,14 +53,16 @@ app.get("/update/:id", function(req,res){
 	
 })
 
-app.get("/AddProd/:id?", function(req,res) {
+app.get("/AddProd", function(req,res) {
+	paginaAtual = "/AddProd";
 	res.render('AddProd');
 	
 });
 
-app.post("/ConfirmEdit", urlencodeParser, function(req,res){
+app.post("/update", urlencodeParser, function(req,res){
 	sql.query("update ss_products set pro_name='"+req.body.pro_name+"',pro_price='"+req.body.pro_price+"', pro_quantity='"+req.body.pro_quantity+"', pro_solds='"+req.body.pro_solds+"' where pro_id='"+req.body.pro_id+"'");
 	// res.render('ConfirmEdit');
+	paginaAtual = "/update";
 	res.redirect('/index');
 
 });
@@ -75,15 +78,14 @@ app.post("/ConfirmEdit", urlencodeParser, function(req,res){
 
 app.post("/index", urlencodeParser, function(req,res){
 	if ((req.body.user == "admin") && (req.body.password) == "admin"){
+		paginaAtual = "/index";
 		res.redirect('/index');
 	}else{
 		res.redirect('/login');
 	}
 });
-app.post("/ConfirmAdd", urlencodeParser, function(req,res){
+app.post("/AddProd", urlencodeParser, function(req,res){
 	sql.query("insert into ss_products(pro_name,pro_price,pro_quantity) values('"+req.body.name+"', '"+req.body.price+"', '"+req.body.quantity+"')");
-	// sql.query("insert into ss_products(pro_name,pro_price,pro_quantity,pro_solds) values('"+req.body.name+"', '"+req.body.price+"', '"+req.body.quantity+"','"+req.body.solds+"')");
-	// res.render('ConfirmAdd');
 	res.redirect('/AddProd');
 
 });
