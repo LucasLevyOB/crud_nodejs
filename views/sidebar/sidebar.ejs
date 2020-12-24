@@ -3,7 +3,9 @@
         <img src="/img/logo_sistema_estoque.png" alt="" class="logo-img">
     </div>
     <hr>
-    <ul class="menu-ul">
+    <main id="main-sidebar">
+        <div class="vertical-line"></div>
+        <ul class="menu-ul">
             <li class="<%- paginaAtual === '/index' ? 'active-sidebar' : '' %>">
                 <a href="/index" class="row">
                     <div class="sidebar-icon fa-1x">
@@ -15,12 +17,13 @@
             <li class="<%- paginaAtual === '/AddProd' ? 'active-sidebar' : '' %>">
                 <a href="/AddProd" class="row">
                     <div class="sidebar-icon">
-                        <i class="fas fa-plus fa-1x"></i>
+                        <i class="fas fa-plus-square fa-1x"></i>
                     </div>
                     Cadastrar
                 </a>
             </li>
         </ul>
+    </main>
 </header>
 <div id="toggle-sidebar" class="justify-content-center align-items-center">
     <!-- <img src="/img/lista.png" alt=""> -->
