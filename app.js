@@ -23,6 +23,17 @@ app.use('/img', express.static(__dirname+'/public/img'));
 app.use('/fontawesome', express.static(__dirname+'/node_modules/@fortawesome/fontawesome-free'));
 
 //Rotas
+app.get("/products/select/:offset/:quantityProducts", function(req,res) {
+	// res.sendFile(__dirname + '/views/login.handlebars');
+	const offset = req.params.offset;
+	const quantityProducts = req.params.quantityProducts;
+	sql.query(`SELECT * FROM ss_products LIMIT ${offset}, ${quantityProducts}`, function(err,results,fields) {
+		// res.render('index', {data: results});
+		return res.json(results);
+		// res.render('index', {data: results, paginaAtual: '/index'});
+	});
+	// res.render('login');
+});
 app.get("/SystemStock", function(req,res) {
 	// res.sendFile(__dirname + '/views/login.handlebars');
 	res.render('login');
@@ -37,6 +48,19 @@ app.get("/index/:id?", function(req,res) {
 	}else{
 		sql.query("select * from ss_products where pro_id='"+req.params.id+"'", function(err,results,fields) {
 			res.render('index', {data: results, paginaAtual: '/index'});
+			// res.render('index', {data: results});
+		});
+	}
+});
+app.get("/produtos/:id?", function(req,res) {
+	if (!req.params.id) {
+		sql.query("select * from ss_products LIMIT 0, 10", function(err,results,fields) {
+			// res.render('index', {data: results});
+			res.render('products', {data: results, paginaAtual: '/produtos'});
+		});
+	}else{
+		sql.query("select * from ss_products where pro_id='"+req.params.id+"'", function(err,results,fields) {
+			res.render('products', {data: results, paginaAtual: '/produtos'});
 			// res.render('index', {data: results});
 		});
 	}

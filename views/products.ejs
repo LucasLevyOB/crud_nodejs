@@ -1,0 +1,74 @@
+<%- include('./head/head.ejs') -%> 
+<%- include('./sidebar/sidebar.ejs') -%>
+<main id="main-body">
+    <h1 class="w-100 text-center mb-4 mt-2">Produtos em Estoque</h1>
+    <div class="download-button-div">
+        Deseja baixar o relatório de produtos em PDF
+        <a href="/relatorio" target="_blank">
+            <button class="table-download-button btn submit-button">
+                <i class="fas fa-download"></i>
+                Download
+            </button>
+        </a>
+    </div>
+    <div id="datatable-div" class="table-responsive w-100 mb-2">
+        <table id="datatable" class="table table-hover table-bordered">
+            <thead>
+                <tr id="datatable-thead">
+                    <th value="0" order="asc" scope="col" title="Nome do produto">
+                        Nome 
+                        <i class="fas fa-sort-down"></i>
+                    </th>
+                    <th value="1" order="asc" scope="col" title="Preço do produto">
+                        Preço(R$) 
+                        <i class="fas fa-sort-down"></i>
+                    </th>
+                    <th value="2" order="asc" scope="col" title="Quantidade de produtos comprados">
+                        Quantidade 
+                        <i class="fas fa-sort-down"></i>
+                    </th>
+                    <th value="3" order="asc" scope="col" title="Quantidade de produtos vendidos">
+                        Vendas 
+                        <i class="fas fa-sort-down"></i>
+                    </th>
+                    <th scope="col" title="Ações como editar e excluir produto">Ações</th>
+                </tr>
+            </thead>
+            <tbody id="datatable-tbody">
+                <% for(let product of data) { %> 
+                    <tr>
+                        <td><%= product.pro_name %></td>
+                        <td><%= product.pro_price.toFixed(2).toString().replace('.', ',') %></td>
+                        <td><%= product.pro_quantity %></td>
+                        <td><%= product.pro_solds %></td>
+                        <td>
+                            <a href="/update/<%= product.pro_id %>">
+                                <!-- <img src="img/edit.png" class="actions-icons" alt="Editar" title="Editar" style="margin-right: 5px; height: auto; max-width: 32px; width: 100%; margin-bottom: 3px;"> -->
+                                <i class="fas fa-edit fa-2x actions-icons edit-icon"></i>
+                            </a>
+                            <a href="/delete/<%= product.pro_id %>">
+                                <!-- <img src="img/delete.png" class="actions-icons" alt="Deletar" title="Deletar" style="margin-right: 5px; height: auto; max-width: 32px; width: 100%; margin-bottom: 3px;"> -->
+                                <i class="fas fa-trash-alt fa-2x actions-icons delete-icon"></i>
+                            </a>
+                        </td>
+                    </tr>
+                <% } %> 
+            </tbody>
+        </table>
+    </div>
+    <div id="message-pagination">
+        <p class="w-100 text-center">
+            Fim da lista.
+        </p>
+    </div>
+    <!-- <div class="download-button-div">
+        Ver o relatório em PDF
+        <a href="/relatorio" target="_blank">
+            <button class="table-download-button btn submit-button">
+                <i class="fas fa-download"></i>
+                Download
+            </button>
+        </a>
+    </div> -->
+</main>
+<%- include('./footer/footer.ejs') -%>
