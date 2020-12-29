@@ -93,15 +93,6 @@ input.login-input {
     }
 }
 
-/* credits */
-.credits {
-    right: 0;
-    left: 0;
-    bottom: 0;
-    position: absolute;
-    margin-bottom: 2px;
-}
-
 /* download button */
 .table-download-button > img {
     max-width: 18px;

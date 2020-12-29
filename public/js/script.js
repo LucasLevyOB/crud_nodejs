@@ -5,12 +5,14 @@ const tbody = document.getElementById('datatable-tbody');
 const thead = document.getElementById('datatable-thead');
 const mainBody = document.getElementById('main-body');
 const messageSelect = document.getElementById('message-pagination');
+const inputProductName = document.getElementById('product-name');
+const inputProductPrice = document.getElementById('product-price');
+const inputProductQuantity = document.getElementById('product-quantity');
+const inputProductSolds = document.getElementById('product-solds');
 
 var offset = 10;
 const quantityProducts = 5;
 var empty = false
-
-const fetchButton = document.getElementById('fetch');
 
 function getProducts(offset, quantityProducts) {
     if(self.fetch) {
@@ -140,18 +142,41 @@ function sortTable(elem) {
     }
 }
 
+try {
+    inputProductName.focus();
+    inputProductPrice.addEventListener('keypress', elem => {
+        if(elem.target.value.length > 5 && elem.target.value.indexOf(',') === -1) {
+            elem.target.value = elem.target.value.slice(0, 5) + ',';
+        }
+        if(!elem.key.match(/[0-9]|\,/)) {
+            elem.preventDefault();
+        }
+    })
+    inputProductQuantity.addEventListener('keypress', elem => {
+        if(!elem.key.match(/[0-9]/)) {
+            elem.preventDefault();
+        }
+    })
+    inputProductSolds.addEventListener('keypress', elem => {
+        if(!elem.key.match(/[0-9]/)) {
+            elem.preventDefault();
+        }
+    })
+} catch(error) {}
 
-mainBody.addEventListener('scroll', element => {
-    const elementHeight = element.target.scrollHeight;
-    const positionScroll = element.target.scrollTop + element.target.clientHeight;
-    if(positionScroll >= elementHeight - 10 && empty === false) {
-        getProducts(offset, quantityProducts);
-        offset+= 5;
-    }
-    if(empty === true) {
-        messageSelect.style.display = 'block';
-    }
-})
+try {
+    mainBody.addEventListener('scroll', element => {
+        const elementHeight = element.target.scrollHeight;
+        const positionScroll = element.target.scrollTop + element.target.clientHeight;
+        if(positionScroll >= elementHeight - 10 && empty === false) {
+            getProducts(offset, quantityProducts);
+            offset+= 5;
+        }
+        if(empty === true) {
+            messageSelect.style.display = 'block';
+        }
+    })
+} catch(error) {}
 
 try {
     toggleButton.addEventListener('click', () => {
