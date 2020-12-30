@@ -1,15 +1,18 @@
 // requires
 const express = require('express');
 const bodyParser = require('body-parser');
-// const handlebars = require('express-handlebars');
 const sql = require('./db/server');
 const pdf = require('html-pdf');
+const { body, validationResult } = require('express-validator');
 const fs = require('fs');
 
 var paginaAtual;
 // instancias
 const app = express();
 const urlencodeParser = bodyParser.urlencoded({extended:false});
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // Templates
 app.set('view engine', 'ejs');
@@ -108,10 +111,48 @@ app.post("/index", urlencodeParser, function(req,res){
 		res.redirect('/login');
 	}
 });
-app.post("/AddProd", urlencodeParser, function(req,res){
-	sql.query("insert into ss_products(pro_name,pro_price,pro_quantity) values('"+req.body.name+"', '"+req.body.price+"', '"+req.body.quantity+"')");
-	res.redirect('/AddProd');
+// app.post("/AddProd", urlencodeParser, function(req,res){
+// 	sql.query("insert into ss_products(pro_name,pro_price,pro_quantity) values('"+req.body.name+"', '"+req.body.price+"', '"+req.body.quantity+"')");
+// 	res.redirect('/AddProd');
 
+// });
+app.post('/AddProd', [
+	body('name').isString().isLength({min: 3, max: 200}).trim().escape(),
+	body('price')
+		.customSanitizer((value, { req }) => {
+			return req.body.price.replace(',', '.');
+		})
+		.customSanitizer((value, { req }) => {
+			if(req.body.price.indexOf('.') > 5) {
+				return req.body.price.slice(0, 5);
+			}
+			return req.body.price;
+		})
+		.customSanitizer((value, { req }) => {
+			if(req.body.price.indexOf('.') === -1 && req.body.price.length > 5) {
+				return req.body.price.slice(0, 5);
+			}
+			return req.body.price;
+		})
+		.isFloat().isLength({ min: 1, max: 8 }),
+	body('quantity').isInt().isLength({ min: 1, max: 2 })
+], (req, res) => {
+	const errors = validationResult(req);
+	if(!errors.isEmpty()) {
+		res.render('AddProd', { message: errors.array(), paginaAtual: 'AddProd' });
+		return false;
+	}
+	sql.query("INSERT INTO ss_products(pro_name, pro_price, pro_quantity) VALUES(?, ?, ?)", [req.body.name, req.body.price, req.body.quantity], (error, result, fields) => {
+		if(error) {
+			res.render('AddProd', { message: 'Erro ao cadastrar.', paginaAtual: 'AddProd' });
+			return false;
+		}
+		if(result.affectedRows >= 1) {
+			res.render('AddProd', { message: 'Cadastrado com sucesso!', paginaAtual: 'AddProd' });
+			return false;
+		}
+		res.render('AddProd', { message: 'Erro ao cadastrar.', paginaAtual: 'AddProd' });
+	});
 });
 app.get('/delete/:id', function(req,res) {
 	sql.query("delete from ss_products where pro_id='"+req.params.id+"'");
