@@ -1,24 +1,35 @@
 <%- include('./head/head.ejs') -%> 
-<main id="login-body" class="d-flex justify-content-center align-items-center">
-    <div id="login-div">
-        <div id="img-login" class="w-100 text-center">
-            <i class="fas fa-user-circle fa-10x"></i>
-            <hr class="login-hr">
-        </div>
-        <form method ="POST" name="FormLogin" action="index">
-            <div class="form-group">
-                <input type="text" class="form-control shadow-none login-input" id="user" aria-describedby="emailHelp" placeholder="Entre com seu usuário" name="user">
-                <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+<main id ="login">
+    <div class="container">
+        <div class="login-card">
+            <div class="row" id="row">
+                <div class="col-md-6">
+                    <div class="left-ctn">
+                       <div class="box">
+                            <header>Estoque fácil</header>
+                            <p>O sistema de informação rápido e prático para o gerenciamento do seu estoque.</p>
+                       </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="right-ctn">
+                        <form method ="POST" name="FormLogin" action="index" class="form-style text-center">
+                            <header>Login</header>
+                            <div class="form-group">
+                                <i class="fas fa-user icon-login"></i>
+                                <input type="text" name="user" id="user" class="input-form" required>
+                            </div>
+                            <div class="form-group">
+                                <i class="fas fa-lock icon-login"></i>
+                                <input type="password" name="password" id="password" class="input-form" required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn butt-login">Entrar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="password" class="form-control shadow-none login-input" id="exampleInputPassword1" placeholder="Sua senha" name="password">
-            </div>
-            <div class="form-group w-100 text-center">
-                <button type="submit" class="btn submit-button w-100">Entrar</button>
-            </div>
-        </form>
-        <div class="w-100 text-center">
-            <a href="">Esqueceu a senha?</a>
         </div>
     </div>
 </main>

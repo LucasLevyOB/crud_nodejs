@@ -72,14 +72,14 @@ app.get("/login", function(req,res) {
 
 app.get("/update/:id", function(req,res){
 	sql.query("select * from ss_products where pro_id ='"+req.params.id+"'", function(err,results,fields) {
-		res.render('update', {pro_id:req.params.id, pro_name:results[0].pro_name,pro_price:results[0].pro_price,pro_quantity:results[0].pro_quantity,pro_solds:results[0].pro_solds});
+		res.render('update', {pro_id:req.params.id,pro_name:results[0].pro_name,pro_price:results[0].pro_price,pro_quantity:results[0].pro_quantity,pro_solds:results[0].pro_solds, paginaAtual: '/update'});
 	});
 	
 })
 
 app.get("/AddProd", function(req,res) {
 	paginaAtual = "/AddProd";
-	res.render('AddProd', {paginaAtual: '/AddProd'});
+	res.render('AddProd', {paginaAtual: '/AddProd', result: 'toast'});
 	
 });
 
@@ -87,7 +87,7 @@ app.post("/update", urlencodeParser, function(req,res){
 	sql.query("update ss_products set pro_name='"+req.body.pro_name+"',pro_price='"+req.body.pro_price+"', pro_quantity='"+req.body.pro_quantity+"', pro_solds='"+req.body.pro_solds+"' where pro_id='"+req.body.pro_id+"'");
 	// res.render('ConfirmEdit');
 	paginaAtual = "/update";
-	res.redirect('/index');
+	res.redirect('/produtos');
 
 });
 
@@ -109,13 +109,19 @@ app.post("/index", urlencodeParser, function(req,res){
 	}
 });
 app.post("/AddProd", urlencodeParser, function(req,res){
-	sql.query("insert into ss_products(pro_name,pro_price,pro_quantity) values('"+req.body.name+"', '"+req.body.price+"', '"+req.body.quantity+"')");
-	res.redirect('/AddProd');
+	sql.query("insert into ss_products(pro_name,pro_price,pro_quantity) values('"+req.body.name+"', '"+req.body.price+"', '"+req.body.quantity+"')", function(err,results,fields) {
+		if(err != null ){
+			console.log("Deu errado");
+		}else{
+			res.render('AddProd', {result: 'toast-add', paginaAtual:'AddProd'});
+			return false;
+		}
+	});
 
 });
 app.get('/delete/:id', function(req,res) {
 	sql.query("delete from ss_products where pro_id='"+req.params.id+"'");
-	res.redirect('/index');
+	res.redirect('/produtos');
 });
 app.get('/relatorio', (request, response) => {
 	// response.render(`table`);
@@ -148,6 +154,11 @@ app.get('/relatorio', (request, response) => {
 			});
 		});
 	});
+});
+
+
+app.get("/sair", function(req,res) {
+	res.redirect('login');
 });
 // app.get('/downloadPdf3', (request, response) => {
 // 	const tempFile = './uploads/relatorio_de_produtos.pdf';
