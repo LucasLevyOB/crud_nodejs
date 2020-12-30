@@ -46,10 +46,30 @@
                                 <!-- <img src="img/edit.png" class="actions-icons" alt="Editar" title="Editar" style="margin-right: 5px; height: auto; max-width: 32px; width: 100%; margin-bottom: 3px;"> -->
                                 <i class="fas fa-edit fa-2x actions-icons edit-icon"></i>
                             </a>
-                            <a href="/delete/<%= product.pro_id %>">
+                            <a href="#" data-toggle="modal" data-target="#Delete<%= product.pro_id %>">
                                 <!-- <img src="img/delete.png" class="actions-icons" alt="Deletar" title="Deletar" style="margin-right: 5px; height: auto; max-width: 32px; width: 100%; margin-bottom: 3px;"> -->
                                 <i class="fas fa-trash-alt fa-2x actions-icons delete-icon"></i>
                             </a>
+                            <!-- Modal Deletar -->
+                            <div class="modal fade" id="Delete<%= product.pro_id %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header bg-danger text-light">
+                                    <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-exclamation-triangle"></i> Confirme</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <div class="modal-body">
+                                    Deseja realmente apagar esse item?
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+                                    <a href="/delete/<%= product.pro_id %>" class="btn btn-danger">Sim</a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                         </td>
                     </tr>
                 <% } %> 

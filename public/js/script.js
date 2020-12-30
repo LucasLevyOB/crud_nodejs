@@ -198,3 +198,5 @@ try {
 } catch(error) {
 
 }
+
+$('#toast-add').toast('show');
