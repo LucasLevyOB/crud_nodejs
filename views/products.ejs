@@ -2,6 +2,9 @@
 <%- include('./sidebar/sidebar.ejs') -%>
 <main id="main-body">
     <h1 class="w-100 text-center mb-4 mt-2">Produtos em Estoque</h1>
+    <p>
+        <%= typeof(message) === 'undefined' ? '' : message %>
+    </p>
     <div class="download-button-div">
         Deseja baixar o relatório de produtos em PDF
         <a href="/relatorio" target="_blank">

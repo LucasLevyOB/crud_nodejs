@@ -199,4 +199,4 @@ try {
 
 }
 
-$('#toast-add').toast('show');
+$('#toast').toast('show');

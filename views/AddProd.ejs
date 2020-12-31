@@ -3,6 +3,9 @@
 <main id="main-body">
   <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
   <!-- Position it -->
+      <p>
+          <%= typeof(message) === 'undefined' ? '' : message %>
+      </p>
       <h1 class="w-100 text-center  mb-4 mt-2">Cadastro de produtos</h1>
       <form method= "POST" action="AddProd" name="AddProd">
           <div class="form-group">
@@ -31,7 +34,7 @@
           </div>
       </form>
           <div style="position: absolute; top: 0; right: 0;">
-            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="<%= result %>">
+            <div class="toast" role="alert" data-delay="5000" aria-live="assertive" aria-atomic="true" id="<%= result %>">
               <div class="toast-header">
                 <img src="..." class="rounded mr-2" alt="...">
                 <strong class="mr-auto">Bootstrap</strong>
@@ -47,5 +50,4 @@
         </div>
     </div>
 </main>
-<script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
 <%- include('./footer/footer.ejs') -%>

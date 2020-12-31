@@ -2,26 +2,29 @@
 <%- include('./sidebar/sidebar.ejs') -%>
 <main id="main-body">
     <h1 class="w-100 text-center">Edição de produtos</h1>
+    <p>
+        <%= typeof(message) === 'undefined' ? '' : message %>
+    </p>
     <form method= "POST" action="/update" name="EditProd">
         <div class="form-group">
-            <input type="hidden" name="pro_id" id="pro_id" value="<%=pro_id%>">
+            <input type="hidden" name="id" id="pro_id" value="<%= typeof(pro_id) === 'undefined' ? '' : pro_id %>">
             <label for="product-name">Nome do produto</label>
-            <input type="text" class="form-control" id="pro_name" aria-describedby="product-name-help" placeholder="Ex: Caneta BIC" name="pro_name" value="<%=pro_name%>">
+            <input type="text" value="<%=pro_name%>" class="form-control" id="product-name" aria-describedby="product-name-help" placeholder="Ex: Caneta BIC" name="name" minlength="3" maxlength="200" required>
             <small id="product-name-help" class="form-text text-muted">Nome do produto que você está criando</small>
         </div>
         <div class="form-group">
             <label for="product-price">Preço do produto</label>
-            <input type="text" class="form-control" id="pro_price" aria-describedby="product-price-help" placeholder="Ex: 2.50" name="pro_price" value="<%=pro_price%>">
+            <input type="text" value="<%=pro_price.toFixed(2).toString().replace('.', ',')%>" class="form-control" id="product-price" aria-describedby="product-price-help" placeholder="Ex: 2.50" name="price" min="1" maxlength="8" required>
             <small id="product-price-help" class="form-text text-muted">Preço do produto que você está criando</small>
         </div>
         <div class="form-group">
             <label for="product-quantity">Quantidade de produtos</label>
-            <input type="number" class="form-control" id="pro_quantity" aria-describedby="product-quantity-help" placeholder="Ex: 100" name="pro_quantity" value="<%=pro_quantity%>">
+            <input type="text" value="<%=pro_quantity%>" class="form-control" id="product-quantity" aria-describedby="product-quantity-help" placeholder="Ex: 100" name="quantity" minlength="1" maxlength="5" required>
             <small id="product-quantity-help" class="form-text text-muted">Quantidade de produtos cadastrados, comprados</small>
         </div>
         <div class="form-group">
             <label for="product-solds">Quantidade de produtos vendidos</label>
-            <input type="number" class="form-control" id="pro_solds" aria-describedby="product-solds-help" placeholder="Ex: 10" name="pro_solds" value="<%=pro_solds%>" >
+            <input type="text" class="form-control" id="product-solds" aria-describedby="product-solds-help" placeholder="Ex: 10" name="solds" value="<%=pro_solds%>" minlength="1" maxlength="5" required>
             <small id="product-solds-help" class="form-text text-muted">Quantidade de produtos vendidos</small>
         </div>
         <div class="form-group w-100 text-center">
