@@ -341,6 +341,19 @@ app.post('/AddProd', [
 	});
 });
 
+// app.use(function(req, res, next) {
+// 	var err = new Error('Not Found');
+// 	err.status = 404;
+// 	next(err);
+// });
+
+app.get('/erro', (req, res) => {
+	res.render('error');
+});
+app.use((req, res, next) => {
+	res.redirect('/erro')
+});
+
 app.listen(3000, function (req,res) {
 	console.log("Servidor funcionando.");
 })

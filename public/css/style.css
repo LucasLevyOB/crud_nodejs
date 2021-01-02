@@ -135,6 +135,29 @@ body{
     border-color: #0B3C5D;   
 }
 
+/* error page */
+.error-link {
+    font-size: 1.5rem;
+}
+.error-message {
+    font-size: 3rem;
+}
+.error-code {
+    font-weight: 700;
+    width: 100%;
+    text-align: center;
+    font-size: 4rem;
+}
+#div-error {
+    max-width: 550px;
+    width: 100%;
+}
+#main-error-page {
+    background-image:
+        radial-gradient(60% 130% at bottom right,transparent 92%, #E9E9E9 92.2%),
+        linear-gradient(0deg, #88BBD6 100%, var(--white) 100%);
+}
+
 /* download button */
 .table-download-button > img {
     max-width: 18px;
