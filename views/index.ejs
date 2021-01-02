@@ -1,6 +1,27 @@
 <%- include('./head/head.ejs') -%> 
 <%- include('./sidebar/sidebar.ejs') -%>
-<main id="main-body">
-    <h1 class="w-100 text-center">Sistema Gerenciador de Estoque</h1>
+<main id="main-body" class="position-relative m-0 row align-content-start">
+    <h1 class="w-100 mb-3 text-center">Sistema Gerenciador de Estoque.</h1>
+    <% if (typeof(data) !== 'undefined') { %>
+        <h3 class="w-100 mb-3">Produtos que estão com poucas unidades em estoque.</h3>
+        <% for(let product of data) { %>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 mb-2 d-flex justify-content-center">
+                <div class="toast product-toast" data-autohide="false" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <i class="fas fa-sticky-note rounded mr-2"></i>
+                        <strong class="mr-auto"><%= product.pro_name %></strong>
+                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="toast-body">
+                        <%= product.pro_name %>, restam apenas <%= product.rest %> em estoque. <a href="/update/<%= product.pro_id %>">Adicionar mais?</a>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    <% } else { %>
+        <h3 class="w-100 mb-3"><%= message %> </h3>
+    <% } %>
 </main>
 <%- include('./footer/footer.ejs') -%>

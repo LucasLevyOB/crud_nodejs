@@ -38,18 +38,18 @@ app.get("/", function(req,res) {
 	res.render('login');
 });
 
-app.get("/index/:id?", function(req,res) {
-	if (!req.params.id) {
-		sql.query("select * from ss_products", function(err,results,fields) {
-			// res.render('index', {data: results});
+app.get("/index", function(req,res) {
+	sql.query("SELECT pro_id, pro_name, (pro_quantity-pro_solds) AS rest FROM ss_products WHERE (pro_quantity-pro_solds) <= 15 ORDER BY rest ASC;", (error, results, fields) => {
+		if(error) {
+			res.render('index', {message: 'Desculpe houve um erro interno.', paginaAtual: '/index'});
+			return false;
+		}
+		if(results[0]) {
 			res.render('index', {data: results, paginaAtual: '/index'});
-		});
-	}else{
-		sql.query("select * from ss_products where pro_id='"+req.params.id+"'", function(err,results,fields) {
-			res.render('index', {data: results, paginaAtual: '/index'});
-			// res.render('index', {data: results});
-		});
-	}
+			return false;
+		}
+		res.render('index', {message: 'Nenhum produto está perto de se esgotar!', paginaAtual: '/index'});
+	});
 });
 app.get("/produtos/:id?", function(req,res) {
 	if (!req.params.id) {

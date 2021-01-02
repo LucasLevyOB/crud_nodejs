@@ -198,5 +198,5 @@ try {
 } catch(error) {
 
 }
-
+$('.product-toast').toast('show')
 $('#toast').toast('show');
