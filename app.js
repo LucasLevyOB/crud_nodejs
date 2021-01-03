@@ -7,21 +7,16 @@ const { body, validationResult, param } = require('express-validator');
 const fs = require('fs');
 const flash = require('connect-flash');
 const session = require('express-session');
+const passport = require('passport');
+require('./auth')(passport);
 
-var paginaAtual;
 // instancias
 const app = express();
 const urlencodeParser = bodyParser.urlencoded({extended:false});
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(flash());
-app.use(session({
-	cookie: { maxAge: 60000 },
-	secret: 'woot',
-	resave: false, 
-	saveUninitialized: false
-}));
 
 // Templates
 app.set('view engine', 'ejs');
@@ -32,13 +27,33 @@ app.use('/js', express.static(__dirname+'/public/js'));
 app.use('/img', express.static(__dirname+'/public/img'));
 app.use('/fontawesome', express.static(__dirname+'/node_modules/@fortawesome/fontawesome-free'));
 
+// autenticacao
+app.use(session({
+	secret: '123', // recomendado ser uma variavel de ambiente
+	resave: false,
+	saveUninitialized: false,
+	cookie: { maxAge: 60 * 60 * 1000 }
+}))
+app.use(passport.initialize());
+app.use(passport.session());
+
+// nao autenticado
+function authenticationMiddleware(req, res, next) {
+	if(req.isAuthenticated()) return next();
+	res.redirect('/login');
+}
+
 //Rotas
 app.get("/", function(req,res) {
 	// res.sendFile(__dirname + '/views/login.handlebars');
-	res.render('login');
+	res.redirect('/login');
 });
 
-app.get("/index", function(req,res) {
+app.get("/login", function(req,res) {
+	res.render('login', { message: req.flash() });
+});
+
+app.get("/index", authenticationMiddleware, function(req,res) {
 	sql.query("SELECT pro_id, pro_name, (pro_quantity-pro_solds) AS rest FROM ss_products WHERE (pro_quantity-pro_solds) <= 15 ORDER BY rest ASC;", (error, results, fields) => {
 		if(error) {
 			res.render('index', {message: 'Desculpe houve um erro interno.', paginaAtual: '/index'});
@@ -51,7 +66,7 @@ app.get("/index", function(req,res) {
 		res.render('index', {message: 'Nenhum produto está perto de se esgotar!', paginaAtual: '/index'});
 	});
 });
-app.get("/produtos/:id?", function(req,res) {
+app.get("/produtos/:id?", authenticationMiddleware, function(req,res) {
 	if (!req.params.id) {
 		sql.query("select * from ss_products LIMIT 0, 10", function(err,results,fields) {
 			// res.render('index', {data: results});
@@ -63,10 +78,6 @@ app.get("/produtos/:id?", function(req,res) {
 			// res.render('index', {data: results});
 		});
 	}
-});
-
-app.get("/login", function(req,res) {
-	res.render('login');
 });
 
 // app.get("/update/:id", function(req,res){
@@ -92,7 +103,7 @@ app.get('/products/select/:offset/:quantityProducts', [
 		return res.json([]);
 	});
 });
-app.get('/update/:id', [
+app.get('/update/:id', authenticationMiddleware, [
 	param('id').exists().notEmpty().isInt().isLength({ min: 1, max: 5 }).escape()
 ], (req, res) => {
 	const errors = validationResult(req);
@@ -124,13 +135,13 @@ app.get('/update/:id', [
 	});
 });
 
-app.get("/AddProd", function(req,res) {
+app.get("/AddProd", authenticationMiddleware, function(req,res) {
 	paginaAtual = "/AddProd";
 	res.render('AddProd', { paginaAtual: '/AddProd', result: 'toast', message: req.flash('message') });
 	
 });
 
-app.get('/delete/:id', [
+app.get('/delete/:id', authenticationMiddleware, [
 	param('id').exists().notEmpty().isInt().isLength({ min: 1, max: 5 }).escape()
 ], (req, res) => {
 	const errors = validationResult(req);
@@ -188,8 +199,9 @@ app.get('/relatorio', (request, response) => {
 });
 
 
-app.get("/sair", function(req,res) {
-	res.redirect('login');
+app.get("/sair", authenticationMiddleware, function(req,res) {
+	req.logout();
+  	res.redirect('/login');
 });
 // app.get('/downloadPdf3', (request, response) => {
 // 	const tempFile = './uploads/relatorio_de_produtos.pdf';
@@ -224,25 +236,47 @@ app.get("/sair", function(req,res) {
 // 		res.redirect('/login');
 // 	}
 // });
-app.post("/index", [
-	body('user').escape().isString(),
-	body('password').escape()
-], (req,res) => {
+// app.post("/index", [
+// 	body('user').exists().notEmpty().escape().isString(),
+// 	body('password').exists().notEmpty().escape()
+// ], (req,res) => {
+// 	const errors = validationResult(req);
+// 	if(!errors.isEmpty()) {
+// 		req.flash('message', errors.array());
+// 		req.redirect('/');
+// 		return false;
+// 	}
+// 	if ((req.body.user == "admin") && (req.body.password) == "admin"){
+// 		res.redirect('/index');
+// 		return false;
+// 	}else{
+// 		req.flash('message', 'Combinação usuário e senha icorretos.');
+// 		res.redirect('/login');
+// 		return false;
+// 	}
+// });
+app.post("/login", [
+	body('user').exists().notEmpty().escape().isString(),
+	body('password').exists().notEmpty().escape()
+], (req, res, next) => {
 	const errors = validationResult(req);
 	if(!errors.isEmpty()) {
+		console.log(errors.array());
 		req.flash('message', errors.array());
-		req.redirect('/');
-		return false;
-	}
-	if ((req.body.user == "admin") && (req.body.password) == "admin"){
-		res.redirect('/index');
-		return false;
-	}else{
-		req.flash('message', 'Combinação usuário e senha icorretos.');
 		res.redirect('/login');
 		return false;
 	}
-});
+	next();
+}, passport.authenticate('local', {
+	successRedirect: '/index',
+	failureRedirect: '/login',
+	failureFlash: true
+}));
+
+// app.post("/login", passport.authenticate('local', {
+// 	successRedirect: '/index',
+// 	failureRedirect: '/login'
+// }));
 // app.post("/AddProd", urlencodeParser, function(req,res){
 // 	sql.query("insert into ss_products(pro_name,pro_price,pro_quantity) values('"+req.body.name+"', '"+req.body.price+"', '"+req.body.quantity+"')", function(err,results,fields) {
 // 		if(err != null ){
@@ -253,7 +287,7 @@ app.post("/index", [
 // 		}
 // 	});
 // });
-app.post('/update', [
+app.post('/update', authenticationMiddleware, [
 	body('id').exists().notEmpty().isInt().isLength({ min: 1, max: 5 }),
 	body('name').exists().notEmpty().isString().isLength({min: 3, max: 200}).trim().escape(),
 	body('price').exists().notEmpty()
@@ -298,7 +332,7 @@ app.post('/update', [
 	});
 });
 
-app.post('/AddProd', [
+app.post('/AddProd', authenticationMiddleware, [
 	body('name').exists().notEmpty().isString().isLength({min: 3, max: 200}).trim().escape(),
 	body('price').exists().notEmpty()
 		.customSanitizer((value, { req }) => {
