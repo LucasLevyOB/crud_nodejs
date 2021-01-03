@@ -198,5 +198,6 @@ try {
 } catch(error) {
 
 }
-$('.product-toast').toast('show')
-$('#toast').toast('show');
+$('.product-toast').toast('show');
+$('#toast-success').toast('show');
+$('#toast-error').toast('show');

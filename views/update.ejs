@@ -1,9 +1,10 @@
 <%- include('./head/head.ejs') -%> 
 <%- include('./sidebar/sidebar.ejs') -%>
 <main id="main-body">
+  <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
     <h1 class="w-100 text-center">Edição de produtos</h1>
     <p>
-        <%= typeof(message) === 'undefined' ? '' : message %>
+       
     </p>
     <form method= "POST" action="/update" name="EditProd">
         <div class="form-group">
@@ -31,5 +32,9 @@
             <button type="submit" class="btn submit-button">Atualizar</button>
         </div>
     </form>
+    <div style="position: absolute; top: 0; right: 0;">
+            <%- include('./toasts/toasts.ejs') -%>
+        </div>
+</div>
 </main>
 <%- include('./footer/footer.ejs') -%>

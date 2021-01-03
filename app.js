@@ -55,18 +55,18 @@ app.get("/produtos/:id?", function(req,res) {
 	if (!req.params.id) {
 		sql.query("select * from ss_products LIMIT 0, 10", function(err,results,fields) {
 			// res.render('index', {data: results});
-			res.render('products', {data: results, paginaAtual: '/produtos', message: req.flash('message')});
+			res.render('products', {data: results, paginaAtual: '/produtos', info: req.flash('info'), result: req.flash('result')});
 		});
 	}else{
 		sql.query("select * from ss_products where pro_id='"+req.params.id+"'", function(err,results,fields) {
-			res.render('products', { message: req.flash('message'), data: results, paginaAtual: '/produtos' });
+			res.render('products', { info:'nada', result: 'nada' ,data: results, paginaAtual: '/produtos' });
 			// res.render('index', {data: results});
 		});
 	}
 });
 
 app.get("/login", function(req,res) {
-	res.render('login');
+	res.render('login', {info: req.flash('info'), result: req.flash('result')});
 });
 
 // app.get("/update/:id", function(req,res){
@@ -97,13 +97,15 @@ app.get('/update/:id', [
 ], (req, res) => {
 	const errors = validationResult(req);
 	if(!errors.isEmpty()) {
-		req.flash('message', 'Parametro inválido.');
+		req.flash('result','toast-error');
+		req.flash('info', 'Parametro inválido.')
 		res.redirect('/produtos');
 		return false;
 	}
 	sql.query("SELECT * FROM ss_products WHERE pro_id = ?", [req.params.id], (errors, results, fields) => {
 		if(errors) {
-			req.flash('message', 'Não foi possível selecionar o produto. 1');
+			req.flash('result', 'toast-error');
+			req.flash('info', 'Não foi possível selecionar o produto.')
 			res.redirect('/produtos');
 			return false;
 		}
@@ -115,18 +117,20 @@ app.get('/update/:id', [
 				pro_quantity:results[0].pro_quantity,
 				pro_solds:results[0].pro_solds,
 				paginaAtual: '/produtos',
-				message: req.flash('message') 
+				result: req.flash('result'),
+				info: req.flash('info') 
 			});
 			return false;
 		}
-		req.flash('message', 'Não foi possível selecionar o produto. 2');
+		req.flash('result', 'toast-error');
+		req.flash('info', 'Não foi possível selecionar o produto.')
 		res.redirect('/produtos');
 	});
 });
 
 app.get("/AddProd", function(req,res) {
 	paginaAtual = "/AddProd";
-	res.render('AddProd', { paginaAtual: '/AddProd', result: 'toast', message: req.flash('message') });
+	res.render('AddProd', { paginaAtual: '/AddProd', result: req.flash('result'), info: req.flash('info') });
 	
 });
 
@@ -135,22 +139,26 @@ app.get('/delete/:id', [
 ], (req, res) => {
 	const errors = validationResult(req);
 	if(!errors.isEmpty()) {
-		req.flash('message', 'Parametro inválido.');
+		req.flash('result', 'toast-error');
+		req.flash('info', 'Parametro inválido.');
 		res.redirect('/produtos');
 		return false;
 	}
 	sql.query("DELETE FROM ss_products WHERE pro_id = ?", [req.params.id], (errors, results, fields) => {
 		if(errors) {
-			req.flash('message', 'Não foi possível deletar o produto.');
+			req.flash('result', 'toast-error');
+			req.flash('info', 'Não foi possível deletar o produto.');
 			res.redirect('/produtos');
 			return false;
 		}
 		if(results.affectedRows >= 1) {
-			req.flash('message', 'Produto deletado com sucesso!');
+			req.flash('result', 'toast-success');
+			req.flash('info', 'Produto deletado com sucesso!');
 			res.redirect('/produtos');
 			return false;
 		}
-		req.flash('message', 'Não foi possível deletar o produto.');
+		req.flash('result', 'toast-error');
+		req.flash('info', 'Não foi possível deletar o produto.');
 		res.redirect('/produtos');
 	});
 });
@@ -230,7 +238,8 @@ app.post("/index", [
 ], (req,res) => {
 	const errors = validationResult(req);
 	if(!errors.isEmpty()) {
-		req.flash('message', errors.array());
+		req.flash('result', 'toast-error');
+		req.flash('info', errors.array());
 		req.redirect('/');
 		return false;
 	}
@@ -238,7 +247,8 @@ app.post("/index", [
 		res.redirect('/index');
 		return false;
 	}else{
-		req.flash('message', 'Combinação usuário e senha icorretos.');
+		req.flash('result', 'toast-success')
+		req.flash('info', 'Combinação usuário e senha icorretos.');
 		res.redirect('/login');
 		return false;
 	}
@@ -278,22 +288,26 @@ app.post('/update', [
 ], (req, res) => {
 	const errors = validationResult(req);
 	if(!errors.isEmpty()) {
-		req.flash('message', errors.array());
+		req.flash('result', 'toast-error');
+		req.flash('info', errors.array());
 		res.redirect(`/update/${req.body.id}`)
 		return false;
 	}
 	sql.query("UPDATE ss_products SET pro_name = ?, pro_price = ?, pro_quantity = ?, pro_solds = ? WHERE pro_id = ?", [req.body.name, req.body.price, req.body.quantity, req.body.solds, req.body.id], (error, results, fields) => {
 		if(error) {
-			req.flash('message', 'Não foi possível atualizar o produto.');
+			req.flash('result', 'toast-error');
+			req.flash('info', 'Não foi possível atualizar o produto.');
 			res.redirect(`/update/${req.body.id}`)
 			return false;
 		}
 		if(results.affectedRows >= 1) {
-			req.flash('message', 'Produto atualizado com sucesso!');
+			req.flash('result', 'toast-success');
+			req.flash('info', 'Produto atualizado com sucesso!');
 			res.redirect(`/update/${req.body.id}`)
 			return false;
 		}
-		req.flash('message', 'Não foi possível atualizar o produto.');
+		req.flash('result', 'toast-error');
+		req.flash('info', 'Não foi possível atualizar o produto.');
 		res.redirect(`/update/${req.body.id}`)
 	});
 });
@@ -321,22 +335,26 @@ app.post('/AddProd', [
 ], (req, res) => {
 	const errors = validationResult(req);
 	if(!errors.isEmpty()) {
-		req.flash('message', errors.array());
+		req.flash('result', 'toast-error');
+		req.flash('info', errors.array());
 		res.redirect('/AddProd');
 		return false;
 	}
 	sql.query("INSERT INTO ss_products(pro_name, pro_price, pro_quantity) VALUES(?, ?, ?)", [req.body.name, req.body.price, req.body.quantity], (error, results, fields) => {
 		if(error) {
-			req.flash('message', 'Erro ao cadastrar.');
+			req.flash('result', 'toast-error');
+			req.flash('info', 'Error ao cadastrar o produto!!');
 			res.redirect('/AddProd');
 			return false;
 		}
 		if(results.affectedRows >= 1) {
-			req.flash('message', 'Cadastrado com sucesso.');
+			req.flash('result', 'toast-success');
+			req.flash('info', 'Produto cadastrado com sucesso!!');
 			res.redirect('/AddProd');
 			return false;
 		}
-		req.flash('message', 'Erro ao cadastrar.');
+		req.flash('result', 'toast-error');
+		req.flash('info', 'Error ao cadastrar o produto!!');
 		res.redirect('/AddProd');
 	});
 });
