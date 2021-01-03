@@ -1,9 +1,9 @@
 <%- include('./head/head.ejs') -%> 
 <%- include('./sidebar/sidebar.ejs') -%>
 <main id="main-body">
-    <h1 class="w-100 text-center mb-4 mt-2">Produtos em Estoque</h1>
+<div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
+     <h1 class="w-100 text-center mb-4 mt-2">Produtos em Estoque</h1>
     <p>
-        <%= typeof(message) === 'undefined' ? '' : message %>
     </p>
     <div class="download-button-div">
         Deseja baixar o relatório de produtos em PDF
@@ -84,6 +84,10 @@
             Fim da lista.
         </p>
     </div>
+    <div style="position: absolute; top: 0; right: 0;">
+        <%- include('./toasts/toasts.ejs') -%>
+    </div>
+</div>
     <!-- <div class="download-button-div">
         Ver o relatório em PDF
         <a href="/relatorio" target="_blank">

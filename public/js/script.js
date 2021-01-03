@@ -199,4 +199,5 @@ try {
 
 }
 
-$('#toast').toast('show');
+$('#toast-success').toast('show');
+$('#toast-error').toast('show');
