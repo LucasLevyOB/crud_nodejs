@@ -9,10 +9,73 @@ const inputProductName = document.getElementById('product-name');
 const inputProductPrice = document.getElementById('product-price');
 const inputProductQuantity = document.getElementById('product-quantity');
 const inputProductSolds = document.getElementById('product-solds');
+const searchButton = document.getElementById('search-button');
+const searchInput = document.getElementById('search-input');
+const scroll = document.getElementsByClassName('scroll')[0];
+const messageSearch = document.getElementById('message-search');
+const deleteModal = document.getElementById('delete-modal');
+const anchorDeleteModal = document.getElementById('anchor-delete-modal');
 
 var offset = 10;
 const quantityProducts = 5;
-var empty = false
+var empty = false;
+
+try {
+    tbody.addEventListener('click', elem => {
+        const element = elem.target;
+        if(element.getAttribute('product-id')) {
+            $('#delete-modal').modal('show');
+            anchorDeleteModal.setAttribute('href', `/delete/${element.getAttribute('product-id')}`)
+        }
+    })
+} catch(error) {}
+
+try {
+    searchButton.addEventListener('click', elem => {
+        elem.preventDefault();
+        if(searchInput.value === '') {
+            datatable.classList.add('d-none');
+            messageSearch.innerText = 'Por favor digite algo no campo de pesquisa.';
+            messageSearch.classList.remove('d-none');
+            return false;
+        }
+        searchProducts(searchInput.value, tbody);
+    });
+} catch(error) {
+
+}
+
+function searchProducts(value, tbodyTable) {
+    if(self.fetch) {
+        datatable.classList.add('d-none');
+        messageSearch.innerText = 'Carregando...';
+        messageSearch.classList.remove('d-none');
+        fetch(`http://localhost:3000/produtos/select/${value}`)
+        .then(response => response.json())
+        .then(jsonArray => {
+            if(jsonArray.length !== 0) {
+                tbody.innerHTML = '';
+                datatable.classList.remove('d-none');
+                messageSearch.classList.add('d-none');
+                jsonArray.map(object => {
+                    addValuesTable(tbody, object);
+                });
+                return false;
+            }
+            datatable.classList.add('d-none');
+            messageSearch.innerText = 'Nenhum produto encontrado.';
+            messageSearch.classList.remove('d-none');
+        })
+        .catch( error => {
+            datatable.classList.add('d-none');
+            messageSearch.innerText = 'Houve um erro inesperado, desculpe!';
+            messageSearch.classList.remove('d-none');
+            console.error('Erro: ', error);
+        });
+    } else {
+        console.error('Não possui suporte à Fetch API');
+    }
+}
 
 function getProducts(offset, quantityProducts) {
     if(self.fetch) {
@@ -84,7 +147,10 @@ function addValuesTable(tbodyTable, object) {
     iconUpdate.classList.add('fas', 'fa-edit', 'fa-2x', 'actions-icons', 'edit-icon');
     createElementChild(linkUpdate, iconUpdate);
     const linkDelete = createElementH('a');
-    linkDelete.setAttribute('href', `/delete/${object.pro_id}`);
+    // href="#" class="delete-icon-anchor" product-id="<%= product.pro_id %>"
+    linkDelete.setAttribute('href', '#');
+    linkDelete.setAttribute('product-id', object.pro_id);
+    linkDelete.classList.add('delete-icon-anchor');
     const iconDelete = createElementH('i');
     iconDelete.classList.add('fas', 'fa-trash-alt', 'fa-2x', 'actions-icons', 'delete-icon');
     createElementChild(linkDelete, iconDelete);
@@ -165,7 +231,7 @@ try {
 } catch(error) {}
 
 try {
-    mainBody.addEventListener('scroll', element => {
+    scroll.addEventListener('scroll', element => {
         const elementHeight = element.target.scrollHeight;
         const positionScroll = element.target.scrollTop + element.target.clientHeight;
         if(positionScroll >= elementHeight - 10 && empty === false) {

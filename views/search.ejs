@@ -1,19 +1,18 @@
 <%- include('./head/head.ejs') -%> 
 <%- include('./sidebar/sidebar.ejs') -%>
-<main id="main-body" class="scroll">
+<main id="main-body">
 <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
-    <h1 class="w-100 text-center mb-4 mt-2">Produtos em estoque</h1>
-    <div class="download-button-div">
-        Deseja baixar o relatório de produtos em PDF
-        <a href="/relatorio" target="_blank">
-            <button class="table-download-button btn submit-button">
-                <i class="fas fa-download"></i>
-                Download
+     <h1 class="w-100 text-center mb-4 mt-2">Pesquisar por produtos.</h1>
+     <div class="w-100 d-flex justify-content-center mb-2">
+         <form class="form-inline my-2 my-lg-0" action="">
+            <input class="form-control mr-sm-2" type="search" placeholder="Pesquisar..." aria-label="Search" id="search-input">
+            <button type="submit" class="btn btn-outline-secondary my-2 my-sm-0" id="search-button">
+                <i class="fas fa-search fa-1x"></i>
             </button>
-        </a>
-    </div>
+          </form>
+     </div>
     <div id="datatable-div" class="table-responsive w-100 mb-2">
-        <table id="datatable" class="table table-hover table-bordered">
+        <table id="datatable" class="table table-hover table-bordered d-none">
             <thead>
                 <tr id="datatable-thead">
                     <th value="0" order="asc" scope="col" title="Nome do produto">
@@ -36,30 +35,11 @@
                 </tr>
             </thead>
             <tbody id="datatable-tbody">
-                <% for(let product of data) { %> 
-                    <tr>
-                        <td><%= product.pro_name %></td>
-                        <td><%= product.pro_price.toFixed(2).toString().replace('.', ',') %></td>
-                        <td><%= product.pro_quantity %></td>
-                        <td><%= product.pro_solds %></td>
-                        <td>
-                            <a href="/update/<%= product.pro_id %>">
-                                <i class="fas fa-edit fa-2x actions-icons edit-icon"></i>
-                            </a>
-                            <a href="#" class="delete-icon-anchor" product-id="<%= product.pro_id %>">
-                                <i class="fas fa-trash-alt fa-2x actions-icons delete-icon"></i>
-                            </a>
-                        </td>
-                    </tr>
-                <% } %> 
+                 
             </tbody>
         </table>
     </div>
-    <div id="message-pagination">
-        <p class="w-100 text-center">
-            Fim da lista.
-        </p>
-    </div>
+    <div id="message-search" class="w-100 text-center"></div>
     <div style="position: absolute; top: 0; right: 0;">
         <%- include('./toasts/toasts.ejs') -%>
     </div>

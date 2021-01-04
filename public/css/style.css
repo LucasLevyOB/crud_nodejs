@@ -203,6 +203,9 @@ body{
 .actions-icons:hover {
     opacity: .8;
 }
+.delete-icon-anchor > * {
+    pointer-events: none;
+}
 .actions-icons {
     margin-right: 5px;
     height: auto;
