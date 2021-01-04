@@ -16,7 +16,7 @@ var empty = false
 
 function getProducts(offset, quantityProducts) {
     if(self.fetch) {
-        fetch(`http://localhost:3000/products/select/${offset}/${quantityProducts}`)
+        fetch(`http://localhost:3000/produtos/select/${offset}/${quantityProducts}`)
         .then(response => response.json())
         .then(jsonArray => {
             jsonArray.map(object => {
